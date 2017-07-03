@@ -5,10 +5,22 @@
                 <img class="nav-logo" src="https://wordimpress.com/assets/wordpressIcon2.png" alt="">
             </h1>
             <!--menu items-->
-            <slot></slot>
+            <component v-if="logined" :is="currentView">
+                <!-- inactive components will be cached! -->
+            </component>
         </nav>
     </div>
 </template>
+
+<script>
+import HeaderMenu from './HeaderMenu.vue';
+export default {
+    data: () => ({
+        logined: true,
+        currentView: HeaderMenu
+    })
+};
+</script>
 
 <style lang="scss">
 .nav-logo {

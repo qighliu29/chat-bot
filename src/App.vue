@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <header>
+      <header-nav></header-nav>
     </header>
     <article>
       <router-view></router-view>
@@ -11,11 +12,13 @@
 </template>
 
 <script>
+import HeaderNav from './components/header/HeaderNav.vue';
+
 export default {
   name: 'app',
-  data() {
-    return {
-    }
+  data: () => ({}),
+  components: {
+    HeaderNav
   }
 };
 </script>
