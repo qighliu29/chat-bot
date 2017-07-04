@@ -39,7 +39,9 @@ body {
 }
 
 header {
+  background-color: rgb(95, 95, 95);
   height: 80px;
+  line-height: 80px;
 }
 
 .container {

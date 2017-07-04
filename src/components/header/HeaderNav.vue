@@ -5,7 +5,7 @@
                 <img class="nav-logo" src="https://wordimpress.com/assets/wordpressIcon2.png" alt="">
             </h1>
             <!--menu items-->
-            <component v-if="user != ''" :is="currentView">
+            <component :is="currentView">
                 <!-- inactive components will be cached! -->
             </component>
         </nav>
@@ -13,16 +13,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import HeaderMenu from './HeaderMenu.vue';
+import UserMenu from './UserMenu.vue';
 
 export default {
-    data: () => ({
-        currentView: HeaderMenu
-    }),
-    computed: mapState({
-        user: 'user'
-    })
+    computed: {
+        currentView() {
+            return this.$store.state.user == '' ? HeaderMenu : UserMenu;
+        }
+    }
 };
 </script>
 
