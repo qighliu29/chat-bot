@@ -7,18 +7,24 @@
       <router-view></router-view>
     </article>
     <footer>
+      <footer-bar></footer-bar>
     </footer>
+    <beacon></beacon>
   </div>
 </template>
 
 <script>
 import HeaderNav from './components/header/HeaderNav.vue';
+import FooterBar from './components/footer/FooterBar.vue';
+import Beacon from './components/beacon/Beacon.vue';
 
 export default {
   name: 'app',
   data: () => ({}),
   components: {
-    HeaderNav
+    HeaderNav,
+    FooterBar,
+    Beacon
   }
 };
 </script>
@@ -49,5 +55,11 @@ header {
   margin: 0 auto;
   box-sizing: border-box;
   padding: 0 30px;
+}
+
+footer {
+  background: radial-gradient(ellipse at 69% 50%, #2d2d39 15%, #1b1920 70%);
+  width: 100%;
+  height: auto;
 }
 </style>
