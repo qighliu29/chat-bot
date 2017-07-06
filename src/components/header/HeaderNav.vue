@@ -2,11 +2,9 @@
     <div class="container">
         <nav>
             <h1>
-                <img class="nav-logo" src="https://wordimpress.com/assets/wordpressIcon2.png" alt="">
+                <img class="nav-logo" src="~image/logo.png" alt="">
             </h1>
-            <!--menu items-->
             <component :is="currentView">
-                <!-- inactive components will be cached! -->
             </component>
         </nav>
     </div>
@@ -26,6 +24,12 @@ export default {
 </script>
 
 <style lang="scss">
+nav {
+    height: 100%;
+    max-height: 100%;
+    font-size: 1.8rem;
+}
+
 .nav-logo {
     max-width: 80px;
     max-height: 80px;
