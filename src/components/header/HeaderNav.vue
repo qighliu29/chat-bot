@@ -30,6 +30,12 @@ nav {
     font-size: 1.8rem;
 }
 
+h1 {
+    width: 80px;
+    height: 80px;
+}
+
+h1,
 .nav-logo {
     max-width: 80px;
     max-height: 80px;

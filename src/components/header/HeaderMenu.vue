@@ -1,13 +1,18 @@
 <template>
     <el-menu class="nav-menu" theme="dark" mode="horizontal">
-        <el-menu-item item="nav-menu-item__1" index="1">
-            <a href="">Sign In</a>
-        </el-menu-item>
-        <el-menu-item item="nav-menu-item__2" index="2">
-            <a href="">Create an account</a>
+        <el-menu-item v-for="(tab, index) in tabs" :key="index" :item="'nav-menu-item__'+(index+1)" index="index+1">
+            <a href="">{{ tab }}</a>
         </el-menu-item>
     </el-menu>
 </template>
+
+<script>
+export default {
+    data: () => ({
+        tabs: ['Sign In', 'Create an account']
+    })
+};
+</script>
 
 <style lang="scss">
 .nav-menu {
@@ -28,7 +33,6 @@
         &:hover {
             background-color: transparent;
             border-bottom-color: lighten(rgb(32, 160, 255), 20%);
-            font-weight: 600;
         }
 
         a {

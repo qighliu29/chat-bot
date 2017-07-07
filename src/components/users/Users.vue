@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
+    <div class="container content-area">
         <el-row>
             <el-col :span="10" :offset="7">
-                <el-tabs v-model="activeName" @tab-click="onTabClick">
+                <el-tabs type="border-card" class="div-round" v-model="activeName" @tab-click="onTabClick">
                     <el-tab-pane label="Sign In" name="signIn">
                         <el-form :model="signInForm" label-width="100px" ref="signInForm">
                             <el-form-item prop="email" label="邮箱">
@@ -56,7 +56,7 @@ export default {
         },
         onSignInClick(ref) {
             this.$store.dispatch('SignIn', this.signInForm.email);
-            this.$router.push({name: 'console'});
+            this.$router.push({ name: 'console' });
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -76,3 +76,17 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+.container {
+    &.content-area {
+        padding-top: 5.5rem;
+        padding-bottom: 9.5rem;
+    }
+}
+
+.div-round {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+</style>
