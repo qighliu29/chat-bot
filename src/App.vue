@@ -31,7 +31,13 @@ export default {
 
 <style lang="scss">
 #app {
+    display: flex;
+    flex-direction: column;
     height: 100%;
+
+    article {
+        flex: 1;
+    }
 }
 
 header {

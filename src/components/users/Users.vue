@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import api from '../../axios.js';
+
 export default {
     data: () => ({
         activeName: '',
@@ -94,11 +96,7 @@ export default {
                 lock: true,
                 text: 'Ah...'
             });
-            new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve();
-                }, 3000);
-            }).then(() => {
+            api.signUp().then(() => {
                 loadingInstance.close();
                 this.$router.push({ name: 'console' });
             })
