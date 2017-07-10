@@ -21,8 +21,12 @@ export default {
     line-height: 80px;
     font-weight: normal;
     background-color: transparent;
-    display: flex;
+    display: none;
     align-items: center;
+
+    @include media(">=768px") {
+        display: flex;
+    }
 
     .el-menu-item[item^="nav-menu-item"] {
         height: 80px;
