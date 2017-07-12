@@ -11,7 +11,7 @@
                             <el-form-item prop="password" label="密码">
                                 <el-input v-model="signInForm.password" type="password"></el-input>
                             </el-form-item>
-                            <el-button type="primary" @click="onSignInClick('signInForm')">Sign In</el-button>
+                            <el-button type="primary" @click="doLogin('signInForm')">Sign In</el-button>
                         </el-form>
                     </el-tab-pane>
                     <el-tab-pane label="Create an account" name="signUp" ref="ruleForm">
@@ -91,15 +91,19 @@ export default {
             this.$router.push({ name: 'console' });
         },
         doSignUp(form) {
-            let loadingInstance = this.$loading({
-                fullscreen: true,
-                lock: true,
-                text: 'Ah...'
-            });
-            api.signUp().then(() => {
-                loadingInstance.close();
-                this.$router.push({ name: 'console' });
-            })
+            // let loadingInstance = this.$loading({
+            //     fullscreen: true,
+            //     lock: true,
+            //     text: 'Ah...'
+            // });
+            // api.signUp().then(() => {
+            //     loadingInstance.close();
+            //     this.$router.push({ name: 'console' });
+            // })
+            api.signUp();
+        },
+        doLogin() {
+            api.login();
         }
     },
     beforeRouteEnter(to, from, next) {
