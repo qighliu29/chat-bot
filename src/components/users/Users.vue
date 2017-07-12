@@ -15,13 +15,13 @@
                         </el-form>
                     </el-tab-pane>
                     <el-tab-pane label="Create an account" name="signUp" ref="ruleForm">
-                        <el-form :label-position="'top'" label-width="100px" :model="signUpScheme" ref="signUpForm">
+                        <el-form :label-position="'top'" label-width="100px" :model="signUpInfo" ref="signUpForm">
                             <!--divider-->
                             <div class="group-divider">
                                 <span>Personal Information</span>
                             </div>
                             <el-form-item prop="name">
-                                <el-input placeholder="name"></el-input>
+                                <el-input placeholder="name" v-model="signUpInfo.name"></el-input>
                             </el-form-item>
                             <el-form-item prop="email">
                                 <el-input placeholder="email"></el-input>
@@ -60,8 +60,8 @@ export default {
             email: '',
             password: ''
         },
-        signUpScheme: {
-
+        signUpInfo: {
+            name: ''
         },
         rules: {
             email: [{
@@ -91,16 +91,18 @@ export default {
             this.$router.push({ name: 'console' });
         },
         doSignUp(form) {
-            // let loadingInstance = this.$loading({
-            //     fullscreen: true,
-            //     lock: true,
-            //     text: 'Ah...'
-            // });
-            // api.signUp().then(() => {
-            //     loadingInstance.close();
-            //     this.$router.push({ name: 'console' });
-            // })
-            api.signUp();
+            let loadingInstance = this.$loading({
+                fullscreen: true,
+                lock: true,
+                text: 'Ah...'
+            });
+            api.signUp(this.signUpInfo).then(() => {
+                loadingInstance.close();
+                this.$router.push({ name: 'console' });
+            }).catch(() => this.$message({
+                type: 'info',
+                message: 'Create account failed!'
+            }));
         },
         doLogin() {
             api.login();

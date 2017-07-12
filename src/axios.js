@@ -7,9 +7,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/json'
 const instance = axios.create();
 
 export default {
-    signUp() {
+    signUp(data) {
         // return instance.get('http://localhost:3000/signUp');
-        return instance.post('http://localhost:3000/signUp', {name: 'LiuQi'}, {
+        return instance.post('http://localhost:3000/signUp', data, {
             withCredentials: true
         });
     },
