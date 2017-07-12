@@ -9,9 +9,13 @@ const instance = axios.create();
 export default {
     signUp() {
         // return instance.get('http://localhost:3000/signUp');
-        return instance.post('http://localhost:3000/signUp', {name: 'LiuQi'});
+        return instance.post('http://localhost:3000/signUp', {name: 'LiuQi'}, {
+            withCredentials: true
+        });
     },
     login() {
-        return instance.get('http://localhost:3000/login')
+        return instance.get('http://localhost:3000/login', {
+            withCredentials: true
+        })
     }
 };
