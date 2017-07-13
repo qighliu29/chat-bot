@@ -13,10 +13,10 @@
                 <section>
                     <h2 class="page-title">Overview</h2>
                     <p class="title-note">Overview state of bot instances</p>
-                    <el-row>
-                        <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 3 : 0">
+                    <el-row class="inst-row" v-for="rowIndex in instRowCnt" :key="rowIndex">
+                        <el-col :span="6" v-for="(o, i) in numInRow(rowIndex)" :key="o" :offset="i > 0 ? 3 : 0">
                             <el-card>
-                                <img src="http://2.bp.blogspot.com/-lRNjBVXOHUc/Vb2yN8NKyZI/AAAAAAAANfQ/13I7lRRe1LU/s1600/logo%2Bhut%2Bri%2B70-transparan.png" class="image">
+                                <img src="http://2.bp.blogspot.com/-lRNjBVXOHUc/Vb2yN8NKyZI/AAAAAAAANfQ/13I7lRRe1LU/s1600/logo%2Bhut%2Bri%2B70-transparan.png">
                                 <div class="card-note">
                                     <span>Logo Title</span>
                                     <div class="bottom clearfix">
@@ -32,6 +32,33 @@
         </el-row>
     </div>
 </template>
+
+<script>
+export default {
+    data: () => ({
+        inst: [{
+            running: false,
+            account: '',
+            createAt: Date.now()
+        },
+        {
+            running: true,
+            account: 'aaa',
+            createAt: Date.now()
+        }, {}, {}, {}, {}]
+    }),
+    computed: {
+        instRowCnt() {
+            return Math.floor((this.inst.length - 1) / 3) + 1;
+        }
+    },
+    methods: {
+        numInRow(rowIndex) {
+            return Math.min(3, this.inst.length - (rowIndex - 1) * 3);
+        }
+    }
+};
+</script>
 
 <style lang="scss">
 .container {
@@ -55,14 +82,43 @@
             margin: 5.2rem 0;
         }
 
-        .el-row {
-            height: 32.5rem;
+        .inst-row {
+            margin-bottom: 3.5rem;
+        }
 
-            .el-col {
-                height: 100%;
+        .el-card {
+            img {
+                // scale both width & height to 'card-body'
+                width: 100%;
+                display: block;
+            }
 
-                .el-card {
-                    height: 100%;
+            .card-note {
+                padding: 20px 14px 14px 14px;
+
+                .bottom {
+                    margin-top: 13px;
+                    line-height: 12px;
+
+                    .time {
+                        font-size: 13px;
+                        color: #999;
+                    }
+
+                    .button {
+                        padding: 0;
+                        float: right;
+                    }
+                }
+
+                .clearfix:before,
+                .clearfix:after {
+                    display: table;
+                    content: "";
+                }
+
+                .clearfix:after {
+                    clear: both
                 }
             }
         }
