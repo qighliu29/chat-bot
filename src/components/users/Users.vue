@@ -99,10 +99,13 @@ export default {
             api.signUp(this.signUpInfo).then(() => {
                 loadingInstance.close();
                 this.$router.push({ name: 'console' });
-            }).catch(() => this.$message({
-                type: 'info',
-                message: 'Create account failed!'
-            }));
+            }).catch(() => {
+                loadingInstance.close();
+                this.$message({
+                    type: 'info',
+                    message: 'Create account failed!'
+                })
+            });
         },
         doLogin() {
             api.login();
