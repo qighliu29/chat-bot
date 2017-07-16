@@ -99,11 +99,11 @@ export default {
             api.signUp(this.signUpInfo).then(() => {
                 loadingInstance.close();
                 this.$router.push({ name: 'console' });
-            }).catch(() => {
+            }).catch((err) => {
                 loadingInstance.close();
                 this.$message({
                     type: 'info',
-                    message: 'Create account failed!'
+                    message: `Create account failed! (${err})`
                 })
             });
         },

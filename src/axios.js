@@ -8,7 +8,12 @@ instance.defaults.headers.post['Content-Type'] = 'application/json';
 instance.defaults.withCredentials = true;
 
 instance.interceptors.response.use((res) => {
-    return res;
+    if (res.data.error) {
+        return Promise.reject(res.data.error.message);
+    }
+    else {
+        return res;
+    }
 }, (err) => {
     return Promise.reject(err);
 });
@@ -29,5 +34,8 @@ export default {
     },
     statusInstance(data) {
         return instance.post('http://localhost:3000/status', data);
+    },
+    stopInstance(data) {
+        return instance.post('http://localhost:3000/stop', data);
     }
 };

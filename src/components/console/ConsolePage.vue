@@ -1,15 +1,29 @@
 <template>
     <div class="container console-area">
         <el-row>
-            <el-col :span="6">
+            <el-col :xs="4" :sm="6">
                 <aside>
                     <el-menu class="bg-transparent">
-                        <el-menu-item index="1">Side Nav Item 1</el-menu-item>
-                        <el-menu-item index="2">Side Nav Item 2</el-menu-item>
+                        <el-menu-item index="1">
+                            <i class="el-icon-menu"></i>
+                            <span>Overview</span>
+                        </el-menu-item>
+                        <el-menu-item index="2">
+                            <i class="el-icon-date"></i>
+                            <span>Renew</span>
+                        </el-menu-item>
+                        <el-menu-item index="3">
+                            <i class="el-icon-message"></i>
+                            <span>Ticket</span>
+                        </el-menu-item>
+                        <el-menu-item index="4">
+                            <i class="el-icon-setting"></i>
+                            <span>Settings</span>
+                        </el-menu-item>
                     </el-menu>
                 </aside>
             </el-col>
-            <el-col :span="18">
+            <el-col :xs="20" :sm="18">
                 <section>
                     <h2 class="page-title">Overview</h2>
                     <p class="title-note">Overview state of bot instances</p>
@@ -19,7 +33,7 @@
                                 <div :class="stateToInstanceClass(elem.state)">
                                     <img :class="elem.state == 3 ? '' : 'gray-img'" :src="elem.showIcon"></img>
                                     <div>
-                                        <el-button type="success" :loading="elem.state == 1" @click="launchHandler(index)">Launch</el-button>
+                                        <el-button :type="elem.state == 3 ? 'danger' : 'success'" :loading="elem.state == 1" @click="actionHandler(index)">{{ elem.state == 3 ? 'Stop' : 'Launch' }}</el-button>
                                     </div>
                                 </div>
                                 <div class="card-note">
@@ -63,39 +77,71 @@ export default {
             let insts = res.data.responses[0].instances;
             for (var i = 0; i < cnt; i++) {
                 if (i < insts.length) {
-                    this.inst.push({ state: 3, account: insts[i].uin.toString(), createAt: Date.now(), showIcon: this.wechatIcon });
+                    this.inst.push({ state: 3, account: insts[i].uin.toString(), createAt: Date.now(), showIcon: this.wechatIcon, sid: insts[i].sid });
                 }
                 else {
-                    this.inst.push({ state: 0, account: '', createAt: Date.now(), showIcon: this.wechatIcon });
+                    this.inst.push({ state: 0, account: '', createAt: Date.now(), showIcon: this.wechatIcon, sid: '' });
                 }
             }
         })
     },
     methods: {
+        actionHandler(index) {
+            if (this.inst[index].state == 0) {
+                this.launchHandler(index);
+            }
+            else if (this.inst[index].state == 3) {
+                this.stopHandler(index);
+            }
+        },
         launchHandler(index) {
             this.inst[index].state = 1;
             api.newInstance().then((res) => {
                 let qrCode64 = res.data.responses[0].qrCode;
                 this.inst[index].showIcon = 'data:image/png;base64,' + qrCode64;
                 let sid = res.data.responses[0].sid;
+                this.inst[index].sid = sid;
 
                 this.inst[index].state = 2;
-                let cntr = 1, upbound = 10;
+                // per second in one minute
+                let i = 0, n = 60, interval = 1000;
                 _.delay(function checkInstStatus() {
-                    api.statusInstance({sid: sid}).then((res) => {
+                    api.statusInstance({ sid: sid }).then((res) => {
                         let statusString = res.data.responses[0].statusString;
-                        if (statusString != 'running' && cntr++ < upbound) {
-                             _.delay(checkInstStatus.bind(this), 500);
+                        if (statusString != 'running') {
+                            if (i++ < n) {
+                                _.delay(checkInstStatus.bind(this), interval);
+                            }
+                            else {
+                                // wait for scan qrcode timeout
+                                this.$message({ message: 'Wait timeout, reload to refresh instance status', type: 'warning', showClose: true });
+                            }
                         }
                         else {
+                            // login success
                             this.$message({ message: statusString, type: 'success', showClose: true });
+                            this.inst[index].state = 3;
+                            this.inst[index].showIcon = this.wechatIcon;
                         }
                     }).catch((err) => {
-
+                        console.log(err);
+                        this.$message({ message: 'Failed connect to server', type: 'error', showClose: true });
                     });
-                }.bind(this), 500);
+                }.bind(this), interval);
             }).catch((err) => {
-                this.$message({ message: error.message, type: 'error', showClose: true });
+                this.$message({ message: err.message, type: 'error', showClose: true });
+            });
+        },
+        stopHandler(index) {
+            api.stopInstance({ sid: this.inst[index].sid }).then((res) => {
+                if (res.data.responses[0].result == 0) {
+                    this.inst[index].state = 0;
+                }
+                else {
+                    this.$message({ message: 'Stop failed, please reload or try again later', type: 'info', showClose: true });
+                }
+            }).catch((err) => {
+                this.$message({ message: err.message, type: 'error', showClose: true });
             });
         },
         stateToInstanceClass(state) {
@@ -126,6 +172,18 @@ export default {
                 &:hover {
                     background-color: transparent;
                     color: #20a0ff;
+                }
+            }
+        }
+
+        .el-menu {
+            .el-menu-item {
+                span {
+                    display: none;
+
+                    @include media(">=768px") {
+                        display: inline;
+                    }
                 }
             }
         }
