@@ -107,8 +107,8 @@ export default {
                 let i = 0, n = 60, interval = 1000;
                 _.delay(function checkInstStatus() {
                     api.statusInstance({ sid: sid }).then((res) => {
-                        let statusString = res.data.responses[0].statusString;
-                        if (statusString != 'running') {
+                        let statusString = res.data.responses[0].status;
+                        if (statusString != 10003) {
                             if (i++ < n) {
                                 _.delay(checkInstStatus.bind(this), interval);
                             }

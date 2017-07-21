@@ -23,8 +23,8 @@ export default {
         // return instance.get('http://localhost:3000/signUp');
         return instance.post('http://localhost:3000/signUp', data);
     },
-    login() {
-        return instance.get('http://localhost:3000/login');
+    login(data) {
+        return instance.post('http://localhost:3000/login', data);
     },
     getInstances(data) {
         return instance.post('http://localhost:3000/instances', data);
@@ -37,5 +37,8 @@ export default {
     },
     stopInstance(data) {
         return instance.post('http://localhost:3000/stop', data);
+    },
+    checkSessionState() {
+        return instance.get('http://localhost:3000/checkState');
     }
 };

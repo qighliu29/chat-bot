@@ -11,7 +11,7 @@
                             <el-form-item prop="password" label="密码">
                                 <el-input v-model="signInForm.password" type="password"></el-input>
                             </el-form-item>
-                            <el-button type="primary" @click="doLogin('signInForm')">Sign In</el-button>
+                            <el-button type="primary" @click="onSignInClick()">Sign In</el-button>
                         </el-form>
                     </el-tab-pane>
                     <el-tab-pane label="Create an account" name="signUp" ref="ruleForm">
@@ -87,8 +87,22 @@ export default {
             }
         },
         onSignInClick(ref) {
-            this.$store.dispatch('SignIn', this.signInForm.email);
-            this.$router.push({ name: 'console' });
+            // this.$store.dispatch('SignIn', this.signInForm.email);
+            let loadingInstance = this.$loading({
+                fullscreen: true,
+                lock: true,
+                text: 'Ah...'
+            });
+            api.login({ name: 'liuqi' }).then(() => {
+                loadingInstance.close();
+                this.$router.push({ name: 'console' });
+            }).catch((err) => {
+                loadingInstance.close();
+                this.$message({
+                    type: 'info',
+                    message: `login failed! (${err})`
+                })
+            });
         },
         doSignUp(form) {
             let loadingInstance = this.$loading({
@@ -106,9 +120,6 @@ export default {
                     message: `Create account failed! (${err})`
                 })
             });
-        },
-        doLogin() {
-            api.login();
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -125,6 +136,10 @@ export default {
                     break;
             }
         });
+    },
+    created() {
+        // if has session, redirect to console page
+        api.checkSessionState().then(() => this.$router.push({ name: 'console' }));
     }
 };
 </script>
